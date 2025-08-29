@@ -376,6 +376,7 @@ pub trait NbdDriver {
         flags: CommandFlags,
         size: u64,
     ) -> impl Future<Output = Result<(), ProtocolError>> + Send {
+        let _ = (flags, size);
         async move { Err(ProtocolError::CommandNotSupported) }
     }
 
@@ -398,6 +399,7 @@ pub trait NbdDriver {
         offset: u64,
         length: u32,
     ) -> impl Future<Output = Result<(), ProtocolError>> + Send {
+        let _ = (flags, offset, length);
         async move { Err(ProtocolError::CommandNotSupported) }
     }
 
@@ -422,6 +424,7 @@ pub trait NbdDriver {
         offset: u64,
         length: u32,
     ) -> impl Future<Output = Result<(), ProtocolError>> + Send {
+        let _ = (flags, offset, length);
         async move { Err(ProtocolError::CommandNotSupported) }
     }
 }

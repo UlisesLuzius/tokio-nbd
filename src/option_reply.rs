@@ -103,6 +103,7 @@ impl InfoPayload {
 ///
 /// Each variant contains the data needed for its corresponding reply type.
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) enum OptionReply {
     /// NBD_REP_ACK: Simple acknowledgment
     Ack,

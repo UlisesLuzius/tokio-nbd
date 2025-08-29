@@ -45,6 +45,7 @@ impl SimpleReplyRaw {
 
 // Don't include data in debug output
 impl std::fmt::Debug for SimpleReplyRaw {
+    #[allow(dead_code)]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         #[derive(Debug)]
         struct SimpleReplyRaw<'a> {

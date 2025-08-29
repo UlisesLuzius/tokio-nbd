@@ -61,6 +61,7 @@ enum OptionRequestType {
 /// Each variant corresponds to a specific option request type with associated data where applicable.
 /// These are deserialized from the wire format sent by clients during option negotiation phase.
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) enum OptionRequest {
     /// Request to use a specific export, ending negotiation and starting transmission
     /// Data: name of the requested export
