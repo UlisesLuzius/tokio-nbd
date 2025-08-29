@@ -8,7 +8,7 @@
 /// https://github.com/NetworkBlockDevice/nbd/blob/master/doc/proto.md
 use int_enum::IntEnum;
 
-use crate::flags::TransmissionFlags;
+use crate::{errors::OptionReplyError, flags::TransmissionFlags};
 
 /// Option reply types sent by the server during NBD negotiation.
 ///
@@ -32,7 +32,12 @@ pub(crate) enum OptionReplyType {
     MetaContext = 4,
     // Error replies have bit 31 set and may include error message text:
 
+    // Not supported error yet
+    UnknownError = 0x80000000,
+
     // NBD_REP_ERR_UNSUP (2^31 + 1): Option unknown by server
+    Unsuppoted = 0x80000001,
+
     // NBD_REP_ERR_POLICY (2^31 + 2): Option forbidden by server policy
     // NBD_REP_ERR_INVALID (2^31 + 3): Option syntactically/semantically invalid
     // NBD_REP_ERR_PLATFORM (2^31 + 4): Option not supported on this platform
@@ -116,6 +121,9 @@ pub(crate) enum OptionReply {
 
     /// NBD_REP_META_CONTEXT: Metadata context
     MetaContext(u32, String),
+
+    /// NBD_REP_ERR_UNSUP: Unkown Option
+    Errors(OptionReplyError),
 }
 
 impl OptionReply {
@@ -126,6 +134,10 @@ impl OptionReply {
             OptionReply::Server(_) => OptionReplyType::Server,
             OptionReply::Info(_) => OptionReplyType::Info,
             OptionReply::MetaContext(_, _) => OptionReplyType::MetaContext,
+            OptionReply::Errors(err) => match err {
+                OptionReplyError::Unsupported => OptionReplyType::Unsuppoted,
+                _ => OptionReplyType::UnknownError,
+            },
         }
     }
 
@@ -139,6 +151,10 @@ impl OptionReply {
                 let mut data = id.to_be_bytes().to_vec();
                 data.extend(name.as_bytes());
                 data
+            },
+            OptionReply::Errors(err) => {
+                let err_val = *err as u32;
+                err_val.to_be_bytes().to_vec()
             }
         }
     }

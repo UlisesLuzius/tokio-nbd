@@ -680,10 +680,22 @@ where
                     ));
                 }
             }
-            OptionRequest::StructuredReply => unimplemented!(),
-            OptionRequest::ListMetaContext => unimplemented!(),
-            OptionRequest::SetMetaContext(_) => unimplemented!(),
-            OptionRequest::ExtendedHeaders(_) => unimplemented!(),
+            OptionRequest::StructuredReply => {
+                // unimplemented!();
+                responses.push(OptionReply::Errors(OptionReplyError::Unsupported));
+            },
+            OptionRequest::ListMetaContext => {
+                // unimplemented!();
+                responses.push(OptionReply::Errors(OptionReplyError::Unsupported));
+            },
+            OptionRequest::SetMetaContext(_) => {
+                // unimplemented!();
+                responses.push(OptionReply::Errors(OptionReplyError::Unsupported));
+            },
+            OptionRequest::ExtendedHeaders(_) => {
+                // unimplemented!();
+                responses.push(OptionReply::Errors(OptionReplyError::Unsupported));
+            },
             OptionRequest::ExportName(name) => {
                 let Some(device) = self.get_device(name) else {
                     return Err(OptionReplyError::UnknownExport);
