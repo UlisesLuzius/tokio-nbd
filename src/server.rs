@@ -622,9 +622,9 @@ where
     ///    - `End`: Finish negotiation and proceed to command phase
     #[instrument(name = "nbd_process_option", skip(self), fields(option_type = ?request))]
     async fn handle_option_request(
-        &self,
+        &'_ self,
         request: &OptionRequest,
-    ) -> Result<(Vec<OptionReply>, OptionReplyFinalize<T>), OptionReplyError> {
+    ) -> Result<(Vec<OptionReply>, OptionReplyFinalize<'_, T>), OptionReplyError> {
         let mut responses: Vec<OptionReply> = Vec::new();
 
         match request {
@@ -782,10 +782,10 @@ where
     /// - Select a device for the transmission phase
     #[instrument(name = "nbd_options_negotiation", skip(self, reader, writer))]
     async fn handle_options<R, W>(
-        &self,
+        &'_ self,
         reader: &mut R,
         writer: &mut W,
-    ) -> std::io::Result<SelectedDevice<T>>
+    ) -> std::io::Result<SelectedDevice<'_, T>>
     where
         R: AsyncReadExt + Unpin,
         W: AsyncWrite + Unpin,
